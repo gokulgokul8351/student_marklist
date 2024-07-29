@@ -5,14 +5,19 @@ import connectDB from './lip/db.js'
 const app = express() // create express app
 const PORT = 5000
 
-// connectDB
+// Data understanding middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+// connect DataBase
 connectDB()
 
+// Routes
 app.get('/', (req, res) => {
   res.json({ msg: 'Hello students' })
 })
 
-// Middlewares
+// Middlewares routes
 app.use('/student', routes)
 
 app.listen(PORT, () => {
