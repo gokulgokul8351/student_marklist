@@ -49,6 +49,13 @@ export const updateStudent = async (req, res) => {
 }
 
 // Delete a student
-export const deleteStudent = (req, res) => {
-  res.send({ msg: 'delete a student' })
+export const deleteStudent = async (req, res) => {
+  const studentId = req.params.id
+
+  try {
+    await studentSchema.deleteOne({ _id: studentId })
+    res.status(200).json({ message: 'Student deleted successfully' })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
 }
