@@ -1,9 +1,13 @@
 import express from 'express'
 import routes from './routes/students.route.js'
 import connectDB from './lip/db.js'
+import cors from 'cors'
 
 const app = express() // create express app
 const PORT = 5000
+
+// cors policy
+app.use(cors())
 
 // Data understanding middleware
 app.use(express.json())
