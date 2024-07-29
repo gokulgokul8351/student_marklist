@@ -1,7 +1,14 @@
 import studentSchema from '../models/student.models.js'
 
 // Get all students
-export const getStudents = (req, res) => {}
+export const getStudents = async (req, res) => {
+  try {
+    const students = await studentSchema.find()
+    res.status(201).json(students)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
 
 // Add a student
 export const addStudent = async (req, res) => {
@@ -22,8 +29,23 @@ export const addStudent = async (req, res) => {
 }
 
 // Update a student
-export const updateStudent = (req, res) => {
-  res.send({ msg: 'update a student' })
+export const updateStudent = async (req, res) => {
+  try {
+    const updateStudent = await studentSchema.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        name: req.body.name,
+        mark: req.body.mark,
+      },
+      {
+        new: true,
+      }
+    )
+
+    res.status(200).json(updateStudent)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 }
 
 // Delete a student
