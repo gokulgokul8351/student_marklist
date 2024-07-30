@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import axios from 'axios'
+import { MdDeleteSweep } from 'react-icons/md'
+import { FaRegEdit } from 'react-icons/fa'
+import { IoPersonAdd } from 'react-icons/io5'
 
 function App() {
   const API_URI = 'https://student-marklist.onrender.com'
@@ -103,10 +106,10 @@ function App() {
               onChange={handleSearch}
             />
             <button
-              className="btn green "
+              className="btn blue "
               onClick={handleAddStudent}
             >
-              Add Student
+              <IoPersonAdd /> Add Student
             </button>
           </article>
           <table className="table">
@@ -134,7 +137,7 @@ function App() {
                           className="btn green"
                           onClick={() => handleUpdate(student)}
                         >
-                          Edit
+                          <FaRegEdit /> Edit
                         </button>
                       </td>
                       <td>
@@ -144,7 +147,7 @@ function App() {
                           }
                           className="btn red"
                         >
-                          Delete
+                          <MdDeleteSweep /> Delete
                         </button>
                       </td>
                     </tr>
@@ -173,7 +176,7 @@ function App() {
                     onChange={handleData}
                   />
                   <input
-                    type="text"
+                    type="number"
                     name="mark"
                     placeholder="Mark"
                     id="mark"

@@ -17,6 +17,7 @@ export const addStudent = async (req, res) => {
   // validate
   const newStudent = new studentSchema({
     name: req.body.name,
+    class: req.body.class,
     mark: req.body.mark,
   })
 
@@ -35,6 +36,7 @@ export const updateStudent = async (req, res) => {
       { _id: req.params.id },
       {
         name: req.body.name,
+        class: req.body.class,
         mark: req.body.mark,
       },
       {
