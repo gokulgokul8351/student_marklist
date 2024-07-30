@@ -7,7 +7,12 @@ const app = express() // create express app
 const PORT = 5000
 
 // cors policy
-app.use(cors())
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  })
+)
 
 // Data understanding middleware
 app.use(express.json())
