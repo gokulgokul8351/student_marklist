@@ -7,7 +7,7 @@ This is a simple student management system that allows you to add, delete, updat
 - Update student
 - View student
 
-## Installation
+## Visiting on
 
 Live link : https://student-management-system-1.herokuapp.com/
 
