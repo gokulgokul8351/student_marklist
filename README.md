@@ -1,4 +1,4 @@
-#Student Management System
+# Student Management System
 This is a simple student management system that allows you to add, delete, update and view student information.
 
 ## Features
