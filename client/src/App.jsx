@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import axios from 'axios'
 import { MdDeleteSweep } from 'react-icons/md'
@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
-  const API_URI = 'https://student-marklist.onrender.com'
+  const API = import.meta.env.VITE_REACT_API_KEY
 
   const [students, setStudents] = useState([])
   const [search, setSearch] = useState([])
@@ -21,7 +21,7 @@ function App() {
 
   // Get all students
   const getALLStudents = async () => {
-    await axios.get(`${API_URI}/student`).then((res) => {
+    await axios.get(`${API}/student`).then((res) => {
       setStudents(res.data)
       setSearch(res.data)
     })
@@ -46,7 +46,7 @@ function App() {
   // Delete Functionality
   const handleDelete = async (id, name) => {
     if (window.confirm(`Are you sure you want to delete ${name}`)) {
-      await axios.delete(`${API_URI}/student/${id}`)
+      await axios.delete(`${API}/student/${id}`)
       getALLStudents()
       toast.warning('Successfully Deleted..!')
     }
@@ -81,13 +81,13 @@ function App() {
 
     if (studentData._id) {
       await axios
-        .put(`${API_URI}/student/${studentData._id}`, studentData)
+        .put(`${API}/student/${studentData._id}`, studentData)
         .then(() => {
           toast.success('Successfully Updated..!')
           closeModel()
         })
     } else {
-      await axios.post(`${API_URI}/student`, studentData).then((res) => {
+      await axios.post(`${API}/student`, studentData).then((res) => {
         toast.success('Successfully Added New Student..!')
         closeModel()
       })
