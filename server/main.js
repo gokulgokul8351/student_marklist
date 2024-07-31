@@ -8,10 +8,11 @@ const PORT = 5000
 
 // cors policy
 app.use(
-  cors({
-    origin: 'https://student-marklist-pi.vercel.app/',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  })
+  cors()
+  // {
+  //   origin: 'https://student-marklist-pi.vercel.app/',  // https://student-marklist-pi.vercel.app/
+  //   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  // }
 )
 
 // Data understanding middleware
