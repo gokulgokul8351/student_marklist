@@ -56,6 +56,13 @@
   background-color: #a5241b;
 }
 
+.group-btn {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 4px;
+}
+
 .input-search {
   display: flex;
   justify-content: space-around;
@@ -138,4 +145,11 @@
   background-color: #cac6c6;
   margin: 10px auto;
   outline: none;
+}
+
+.no-data {
+  font-size: 18px;
+  color: #7d69ee;
+  font-weight: 800;
+  color: #7d69ee;
 }

@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import './App.css'
 import axios from 'axios'
 import { MdDeleteSweep } from 'react-icons/md'
 import { FaRegEdit } from 'react-icons/fa'
 import { IoPersonAdd } from 'react-icons/io5'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   const API_URI = 'https://student-marklist.onrender.com'
@@ -13,6 +15,7 @@ function App() {
   const [isModelOpen, setIsModelOpen] = useState(false)
   const [studentData, setStudentData] = useState({
     name: '',
+    class: '',
     mark: '',
   })
 
@@ -34,7 +37,8 @@ function App() {
     const filterStudent = students.filter(
       (student) =>
         student.name.toLowerCase().includes(searchText) ||
-        student.mark.toString().toLowerCase().includes(searchText)
+        student.mark.toString().toLowerCase().includes(searchText) ||
+        student.class.toString().toLowerCase().includes(searchText)
     )
     setSearch(filterStudent)
   }
@@ -44,6 +48,7 @@ function App() {
     if (window.confirm(`Are you sure you want to delete ${name}`)) {
       await axios.delete(`${API_URI}/student/${id}`)
       getALLStudents()
+      toast.warning('Successfully Deleted..!')
     }
   }
 
@@ -51,6 +56,7 @@ function App() {
   const handleAddStudent = () => {
     setStudentData({
       name: '',
+      class: '',
       mark: '',
     })
     setIsModelOpen(true)
@@ -65,14 +71,24 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    if (
+      studentData.name == '' ||
+      studentData.class == '' ||
+      studentData.mark == ''
+    ) {
+      return toast.error('Please fill all the fields')
+    }
+
     if (studentData._id) {
       await axios
         .put(`${API_URI}/student/${studentData._id}`, studentData)
         .then(() => {
+          toast.success('Successfully Updated..!')
           closeModel()
         })
     } else {
       await axios.post(`${API_URI}/student`, studentData).then((res) => {
+        toast.success('Successfully Added New Student..!')
         closeModel()
       })
     }
@@ -92,6 +108,7 @@ function App() {
 
   return (
     <>
+      <ToastContainer />
       <section>
         <header>
           <h2 className="header">Students Record Sheet</h2>
@@ -109,7 +126,10 @@ function App() {
               className="btn blue "
               onClick={handleAddStudent}
             >
-              <IoPersonAdd /> Add Student
+              <div className="group-btn">
+                <IoPersonAdd />
+                <span>Add Student</span>
+              </div>
             </button>
           </article>
           <table className="table">
@@ -123,37 +143,59 @@ function App() {
                 <th>Delete</th>
               </tr>
             </thead>
-            <tbody>
-              {search &&
-                search.map((student, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{student.name}</td>
-                      <td>12th</td>
-                      <td>{student.mark}%</td>
-                      <td>
-                        <button
-                          className="btn green"
-                          onClick={() => handleUpdate(student)}
-                        >
-                          <FaRegEdit /> Edit
-                        </button>
-                      </td>
-                      <td>
-                        <button
-                          onClick={() =>
-                            handleDelete(student._id, student.name)
-                          }
-                          className="btn red"
-                        >
-                          <MdDeleteSweep /> Delete
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                })}
-            </tbody>
+            {students.length > 0 ? (
+              <tbody>
+                {search &&
+                  search.map((student, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{student.name}</td>
+                        <td>{student.class}th</td>
+                        <td>{student.mark}%</td>
+                        <td>
+                          <button
+                            className="btn green"
+                            onClick={() => handleUpdate(student)}
+                          >
+                            <div className="group-btn">
+                              <FaRegEdit />
+                              <span>Edit</span>
+                            </div>
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            onClick={() =>
+                              handleDelete(student._id, student.name)
+                            }
+                            className="btn red"
+                          >
+                            <div className=" group-btn ">
+                              <MdDeleteSweep />
+                              <span>Delete</span>
+                            </div>
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                  })}
+              </tbody>
+            ) : (
+              <>
+                <tbody className="no-data-body">
+                  <tr>
+                    <td
+                      className="no-data"
+                      colSpan={6}
+                    >
+                      No data found Add a new data or refresh the page
+                    </td>
+                  </tr>
+                </tbody>
+              </>
+            )}
+            <tbody></tbody>
           </table>
 
           {isModelOpen && (
@@ -173,6 +215,14 @@ function App() {
                     placeholder="Name"
                     id="name"
                     value={studentData.name}
+                    onChange={handleData}
+                  />
+                  <input
+                    type="text"
+                    name="class"
+                    placeholder="Class"
+                    id="class"
+                    value={studentData.class}
                     onChange={handleData}
                   />
                   <input
