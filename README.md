@@ -9,7 +9,7 @@ This is a simple student management system that allows you to add, delete, updat
 
 ## Visiting on
 
-Live link : https://student-management-system-1.herokuapp.com/
+Live link : https://student-marklist-pi.vercel.app/
 
 GitHub link : https://github.com/gokulgokul8351/student_marklist
 
