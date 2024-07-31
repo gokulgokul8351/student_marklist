@@ -32,6 +32,7 @@ function App() {
   }, [])
 
   // Search Functionality
+
   const handleSearch = (e) => {
     const searchText = e.target.value.toLowerCase()
     const filterStudent = students.filter(
@@ -83,7 +84,7 @@ function App() {
       await axios
         .put(`${API}/student/${studentData._id}`, studentData)
         .then(() => {
-          toast.success('Successfully Updated..!')
+          toast.success('Successfully Updated...!')
           closeModel()
         })
     } else {
