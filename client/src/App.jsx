@@ -8,7 +8,8 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
-  const API = import.meta.env.VITE_REACT_API_KEY
+  const API =
+    import.meta.env.VITE_REACT_API_KEY_1 || import.meta.env.VITE_REACT_API_KEY_2
 
   const [students, setStudents] = useState([])
   const [search, setSearch] = useState([])
