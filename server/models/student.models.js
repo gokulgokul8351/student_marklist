@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose'
 
 // write the student schema
 const schema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
   class: { type: String, required: true },
   mark: { type: Number, required: true },
 })

@@ -47,9 +47,10 @@ function App() {
   // Delete Functionality
   const handleDelete = async (id, name) => {
     if (window.confirm(`Are you sure you want to delete ${name}`)) {
-      await axios.delete(`${API}/student/${id}`)
-      getALLStudents()
-      toast.warning('Successfully Deleted..!')
+      await axios.delete(`${API}/student/${id}`).then((res) => {
+        getALLStudents()
+        toast.warning(`Successfully Deleted Student ${name}.`)
+      })
     }
   }
 
@@ -83,15 +84,26 @@ function App() {
     if (studentData._id) {
       await axios
         .put(`${API}/student/${studentData._id}`, studentData)
-        .then(() => {
-          toast.success('Successfully Updated...!')
+        .then((res) => {
+          toast.success(res.data.message)
           closeModel()
         })
     } else {
-      await axios.post(`${API}/student`, studentData).then((res) => {
-        toast.success('Successfully Added New Student..!')
-        closeModel()
-      })
+      await axios
+        .post(`${API}/student`, studentData)
+        .then((res) => {
+          try {
+            toast.success(res.data.message)
+            closeModel()
+          } catch (error) {
+            toast.error('Something went wrong')
+          }
+        })
+        .catch((error) => {
+          toast.error(
+            `Already student ${studentData.name} exist try another name`
+          )
+        })
     }
   }
 
@@ -209,36 +221,45 @@ function App() {
                   &times;
                 </span>
                 <h2>{studentData._id ? 'Edit' : 'Add'} Student</h2>
-                <div className="input-group">
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                    id="name"
-                    value={studentData.name}
-                    onChange={handleData}
-                  />
-                  <input
-                    type="text"
-                    name="class"
-                    placeholder="Class"
-                    id="class"
-                    value={studentData.class}
-                    onChange={handleData}
-                  />
-                  <input
-                    type="number"
-                    name="mark"
-                    placeholder="Mark"
-                    id="mark"
-                    value={studentData.mark}
-                    onChange={handleData}
-                  />
+                <div className="input-content">
+                  <div className="input-group">
+                    <label htmlFor="name">Name :</label>
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Name"
+                      id="name"
+                      value={studentData.name}
+                      onChange={handleData}
+                    />
+                  </div>
+                  <div className="input-group">
+                    <label htmlFor="class">Class :</label>
+                    <input
+                      type="text"
+                      name="class"
+                      placeholder="Class"
+                      id="class"
+                      value={studentData.class}
+                      onChange={handleData}
+                    />
+                  </div>
+                  <div className="input-group">
+                    <label htmlFor="mark">Mark :</label>
+                    <input
+                      type="number"
+                      name="mark"
+                      placeholder="Mark %"
+                      id="mark"
+                      value={studentData.mark}
+                      onChange={handleData}
+                    />
+                  </div>
                   <button
                     className="btn green"
                     onClick={handleSubmit}
                   >
-                    Add New
+                    {studentData._id ? 'Update Student' : 'Add Student'}
                   </button>
                 </div>
               </div>

@@ -14,18 +14,26 @@ export const getStudents = async (req, res) => {
 export const addStudent = async (req, res) => {
   // id, name, mark
 
-  // validate
-  const newStudent = new studentSchema({
-    name: req.body.name,
-    class: req.body.class,
-    mark: req.body.mark,
-  })
+  const studentExists = await studentSchema.findOne({ name: req.body.name })
+  if (studentExists) {
+    return res.status(404).json({ message: 'Student already exists 1' })
+  } else {
+    // validate
+    const newStudent = new studentSchema({
+      name: req.body.name,
+      class: req.body.class,
+      mark: req.body.mark,
+    })
 
-  try {
-    const student = await newStudent.save()
-    return res.status(201).json(student)
-  } catch (error) {
-    return res.status(400).json({ message: error.message })
+    try {
+      const student = await newStudent.save()
+      return res.status(201).json({
+        message: `New Student ${newStudent.name} Added Successfully...!`,
+        student,
+      })
+    } catch (error) {
+      return res.status(401).json({ message: error.message })
+    }
   }
 }
 
@@ -44,7 +52,10 @@ export const updateStudent = async (req, res) => {
       }
     )
 
-    res.status(200).json(updateStudent)
+    res.status(200).json({
+      message: `Student ${req.body.name} updated successfully`,
+      updateStudent,
+    })
   } catch (error) {
     res.status(400).json({ message: error.message })
   }
@@ -53,10 +64,13 @@ export const updateStudent = async (req, res) => {
 // Delete a student
 export const deleteStudent = async (req, res) => {
   const studentId = req.params.id
+  const studentName = req.body.name
 
   try {
     await studentSchema.deleteOne({ _id: studentId })
-    res.status(200).json({ message: 'Student deleted successfully..' })
+    res.status(200).json({
+      message: `Student deleted successfully..`,
+    })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
