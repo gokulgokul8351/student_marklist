@@ -90,6 +90,9 @@ function App() {
           toast.success(res.data.message)
           closeModel()
         })
+        .catch((error) => {
+          toast.error(`Already exists student name try another name `)
+        })
     } else {
       await axios
         .post(`${API}/student`, studentData)

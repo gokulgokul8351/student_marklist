@@ -39,9 +39,18 @@ export const addStudent = async (req, res) => {
 
 // Update a student
 export const updateStudent = async (req, res) => {
+  const studentExists = await studentSchema.findOne({ name: req.body.name })
+
+  if (studentExists) {
+    return res
+      .status(404)
+      .json({ message: `${studentExists.name} already exists 2` })
+  }
+
   try {
     const updateStudent = await studentSchema.findOneAndUpdate(
       { _id: req.params.id },
+
       {
         name: req.body.name,
         class: req.body.class,
@@ -57,14 +66,13 @@ export const updateStudent = async (req, res) => {
       updateStudent,
     })
   } catch (error) {
-    res.status(400).json({ message: error.message })
+    res.status(401).json({ message: 'Already exists this student name' })
   }
 }
 
 // Delete a student
 export const deleteStudent = async (req, res) => {
   const studentId = req.params.id
-  const studentName = req.body.name
 
   try {
     await studentSchema.deleteOne({ _id: studentId })
